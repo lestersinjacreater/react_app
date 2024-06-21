@@ -1,14 +1,56 @@
 .app {
-    text-align: center;
-    margin: 0 auto;
-    padding: 20px;
-    max-width: 600px;
-    position: absolute;
-    left: 25%;
-    right: 25%;
-    top: 10%;
-    bottom: 10%;
-    
+  text-align: center;
+  margin: 0 auto;
+  padding: 20px;
+  max-width: 600px;
+  background-image: url('./assets/bg-desktop-light.jpg'); 
+  background-size: cover;
+  background-position: center;
+  position: absolute;
+  right: 25%;
+  left: 25%;
+  top: 10%;
+  bottom: 50%;
+  border-radius: 10px;
 
+  &.dark {
+    background-image: url('./assets/bg-desktop-dark.jpg');
+    color: white;
+
+    .filters button {
+      background-color: #444;
+      color: white;
+    }
+
+    .toggleButton {
+      background-color: #222;
+      color: white;
+    }
   }
-  
+
+  .filters {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+
+    button {
+      margin: 0 5px;
+      padding: 10px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+
+      &.active {
+        font-weight: bold;
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .toggleButton {
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    cursor: pointer;
+  }
+}

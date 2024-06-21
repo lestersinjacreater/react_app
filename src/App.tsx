@@ -10,10 +10,12 @@ interface Todo {
 }
 
 type Filter = 'all' | 'active' | 'completed';
+type Theme = 'light' | 'dark';
 
 const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<Filter>('all');
+  const [theme, setTheme] = useState<Theme>('light');
 
   const addTodo = (text: string) => {
     const newTodo = { id: Date.now(), text, completed: false };
@@ -39,9 +41,16 @@ const App: React.FC = () => {
     return true;
   });
 
+  const toggleTheme = () => {
+    setTheme(theme === 'light' ? 'dark' : 'light');
+  };
+
   return (
-    <div className={styles.app}>
+    <div className={`${styles.app} ${theme === 'dark' ? styles.dark : ''}`}>
       <h1>TODO</h1>
+      <button onClick={toggleTheme} className={styles.toggleButton}>
+        Switch to {theme === 'light' ? 'Dark' : 'Light'} Mode
+      </button>
       <TodoInput addTodo={addTodo} />
       <TodoList todos={filteredTodos} toggleTodo={toggleTodo} deleteTodo={deleteTodo} />
       <div className={styles.filters}>
