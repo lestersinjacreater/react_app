@@ -16,6 +16,12 @@ interface Props {
 const TodoItem: React.FC<Props> = ({ todo, toggleTodo, deleteTodo }) => {
   return (
     <li className={styles.todoItem}>
+      <input
+        type="checkbox"
+        checked={todo.completed}
+        onChange={() => toggleTodo(todo.id)}
+        className={styles.checkbox}
+      />
       <span
         className={todo.completed ? styles.completed : ''}
         onClick={() => toggleTodo(todo.id)}
