@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TodoInput from './componets/TodoInput';
 import TodoList from './componets/TodoList';
 import styles from './App.module.scss';
+import { loadTodos, saveTodos } from './utils/localStorage';
 
 interface Todo {
   id: number;
@@ -13,9 +14,13 @@ type Filter = 'all' | 'active' | 'completed';
 type Theme = 'light' | 'dark';
 
 const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>(loadTodos());
   const [filter, setFilter] = useState<Filter>('all');
   const [theme, setTheme] = useState<Theme>('light');
+
+  useEffect(() => {
+    saveTodos(todos);
+  }, [todos]);
 
   const addTodo = (text: string) => {
     const newTodo = { id: Date.now(), text, completed: false };
