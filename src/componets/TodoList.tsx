@@ -1,5 +1,6 @@
 import React from 'react';
-import TodoItem from '../items/Todoitem';
+import TodoItem from './TodoItem';
+import styles from './TodoList.module.scss';
 
 interface Todo {
   id: number;
@@ -15,7 +16,7 @@ interface Props {
 
 const TodoList: React.FC<Props> = ({ todos, toggleTodo, deleteTodo }) => {
   return (
-    <ul>
+    <ul className={styles.todoList}>
       {todos.map(todo => (
         <TodoItem
           key={todo.id}

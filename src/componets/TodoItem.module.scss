@@ -1,0 +1,16 @@
+.todoItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .completed {
+    text-decoration: line-through;
+  }
+  
+  .deleteButton {
+    padding: 5px 10px;
+  }
+  
