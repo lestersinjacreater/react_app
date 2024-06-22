@@ -1,43 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useReducer, useEffect } from 'react';
 import TodoInput from './componets/TodoInput';
 import TodoList from './componets/TodoList';
 import styles from './App.module.scss';
 import { loadTodos, saveTodos } from './utils/localStorage';
-
-interface Todo {
-  id: number;
-  text: string;
-  completed: boolean;
-}
-
-type Filter = 'all' | 'active' | 'completed';
-type Theme = 'light' | 'dark';
+import SunIcon from './assets/sun.svg';
+import MoonIcon from './assets/moon.svg';
+import { todoReducer, Filter, Theme, Todo } from './reducers/todoReducer';
 
 const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>(loadTodos());
-  const [filter, setFilter] = useState<Filter>('all');
-  const [theme, setTheme] = useState<Theme>('light');
+  const [state, dispatch] = useReducer(todoReducer, {
+    todos: loadTodos(),
+    filter: 'all',
+    theme: 'light',
+  });
+
+  const { todos, filter, theme } = state;
 
   useEffect(() => {
     saveTodos(todos);
   }, [todos]);
-
-  const addTodo = (text: string) => {
-    const newTodo = { id: Date.now(), text, completed: false };
-    setTodos([...todos, newTodo]);
-  };
-
-  const toggleTodo = (id: number) => {
-    setTodos(todos.map(todo => todo.id === id ? { ...todo, completed: !todo.completed } : todo));
-  };
-
-  const deleteTodo = (id: number) => {
-    setTodos(todos.filter(todo => todo.id !== id));
-  };
-
-  const clearCompleted = () => {
-    setTodos(todos.filter(todo => !todo.completed));
-  };
 
   const filteredTodos = todos.filter(todo => {
     if (filter === 'all') return true;
@@ -46,26 +27,45 @@ const App: React.FC = () => {
     return true;
   });
 
-  const toggleTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
-  };
-
   return (
     <div className={`${styles.app} ${theme === 'dark' ? styles.dark : ''}`}>
       <h1>TODO</h1>
-      <button onClick={toggleTheme} className={styles.toggleButton}>
-        Switch to {theme === 'light' ? 'Dark' : 'Light'} Mode
+      <button onClick={() => dispatch({ type: 'TOGGLE_THEME' })} className={styles.toggleButton}>
+        {theme === 'light' ? (
+          <img src={MoonIcon} alt="Switch to Dark Mode" className={styles.icon} />
+        ) : (
+          <img src={SunIcon} alt="Switch to Light Mode" className={styles.icon} />
+        )}
       </button>
-      <TodoInput addTodo={addTodo} />
-      <TodoList todos={filteredTodos} toggleTodo={toggleTodo} deleteTodo={deleteTodo} />
+      <TodoInput addTodo={(text: string) => dispatch({ type: 'ADD_TODO', payload: text })} />
+      <TodoList
+        todos={filteredTodos}
+        toggleTodo={(id: number) => dispatch({ type: 'TOGGLE_TODO', payload: id })}
+        deleteTodo={(id: number) => dispatch({ type: 'DELETE_TODO', payload: id })}
+      />
       <div className={styles.filters}>
-        <button onClick={() => setFilter('all')} className={filter === 'all' ? styles.active : ''}>All</button>
-        <button onClick={() => setFilter('active')} className={filter === 'active' ? styles.active : ''}>Active</button>
-        <button onClick={() => setFilter('completed')} className={filter === 'completed' ? styles.active : ''}>Completed</button>
-        <button onClick={clearCompleted}>Clear Completed</button>
+        <button
+          onClick={() => dispatch({ type: 'SET_FILTER', payload: 'all' })}
+          className={filter === 'all' ? styles.active : ''}
+        >
+          All
+        </button>
+        <button
+          onClick={() => dispatch({ type: 'SET_FILTER', payload: 'active' })}
+          className={filter === 'active' ? styles.active : ''}
+        >
+          Active
+        </button>
+        <button
+          onClick={() => dispatch({ type: 'SET_FILTER', payload: 'completed' })}
+          className={filter === 'completed' ? styles.active : ''}
+        >
+          Completed
+        </button>
+        <button onClick={() => dispatch({ type: 'CLEAR_COMPLETED' })}>Clear Completed</button>
       </div>
     </div>
   );
-}
+};
 
 export default App;
