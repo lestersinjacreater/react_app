@@ -5,7 +5,12 @@ import styles from './App.module.scss';
 import { loadTodos, saveTodos } from './utils/localStorage';
 import SunIcon from './assets/sun.svg';
 import MoonIcon from './assets/moon.svg';
-import { todoReducer, Filter, Theme, Todo } from './reducers/todoReducer';
+import { todoReducer, 
+  //Filter,
+   //Theme, 
+  
+  // Todo
+   } from './reducers/todoReducer';
 
 const App: React.FC = () => {
   const [state, dispatch] = useReducer(todoReducer, {
